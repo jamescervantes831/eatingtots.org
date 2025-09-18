@@ -79,7 +79,7 @@ export default function about() {
           <Image src="/jouice.png" alt="cookie" width={500} height={500} className='md:block hidden' />
         </div>
       </section>
-      <section className='md:px-12 px-4 pt-12 pb-52 bg-[url("/background.png")] bg-no-repeat bg-contain md:bg-center bg-bottom relative'>
+      <section className='md:px-12 px-4 pt-12 pb-52 bg-[url("/background.png")] bg-no-repeat bg-contain bg-bottom relative'>
         <div >
           <h1 className="md:text-6xl text-3xl font-bold py-6 text-black md:w-[80%] w-full mx-auto">Help us raise funding to provide: </h1>
 
