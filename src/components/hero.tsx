@@ -1,35 +1,67 @@
 import React from 'react'
-
+import Image from 'next/image'
 export default function hero() {
   return (
-    <section className="bg-[#c1ff72] relative">
+    <section className="relative">
       <div className="relative">
-        <div className="md:px-32 px-0">
-          <img
-            src="/banner.png"
+        <div className="">
+          <Image
+            src="/background.png"
             alt="banner"
-            className="object-cover w-full h-[600px]"
+            width={1920}
+            height={1080}
+            className="object-cover w-full h-[750px]"
           />
         </div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-          <img
+        <div className="absolute top-[0%] md:left-[15%] left-0 z-[4]">
+          <Image
             src="/bannerLogo.png"
             alt="banner"
-            className="w-auto h-[350px] object-contain"
+            width={800}
+            height={800}
           />
 
         </div>
+        <div className="absolute bottom-0 right-0 z-[3]">
+          <Image
+            src="/boy.png"
+            alt="banner"
+            width={500}
+            height={500}
+          />
+        </div>
+        <div className="absolute bottom-0 right-0 z-[1]">
+          <Image
+            src="/boy-bg.png"
+            alt="banner"
+            width={450}
+            height={500}
+          />
+        </div>
+        <div className="absolute top-0 left-0">
+          <Image
+            src="/top-left.png"
+            alt="banner"
+            width={250}
+            height={250}
+          />
+        </div>
+        <div className="absolute bottom-0 left-0">
+          <Image
+            src="/berry.png"
+            alt="banner"
+            width={450}
+            height={450}
+            className='hidden md:block'
+          />
+        </div>
+        <div className="absolute bottom-[15%] right-0 w-[65%] z-[2]">
+          <p className='md:block hidden text-white font-bold text-xl bg-[#0da84a] px-4 py-8 '>Supporting Providers , Parents, and Children  every crumb in the way.....</p>
+        </div>
       </div>
-      <div className="w-[100%] static bg-[#0da84a] ">
-        <div className='md:p-8 p-4  gap-4 flex flex-col md:flex-row items-start md:items-center justify-between'>
-        <p className="text-white font-bold text-lg">
-          A New CACFP Sponsor is Coming Soon! 🌟 <br />
-          Eating Tots Inc. is preparing to support providers like YOU! <br />
-          Join our waitlist and be the first to know when we launch!
-        </p>
-        <a target="_blank" href="https://forms.gle/Ybe2n32C2cgtsLxb6"> <button className="bg-white text-[#0da84a] px-6 py-2 cursor-pointer rounded-lg">Register Now</button></a>
-      </div>
-      </div>
+      <div className="md:hidden block">
+          <p className='text-white font-bold text-xl bg-[#0da84a] px-4 py-8 '>Supporting Providers , Parents, and Children  every crumb in the way.....</p>
+        </div>
     </section>
   )
 }

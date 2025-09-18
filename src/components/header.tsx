@@ -19,7 +19,8 @@ export default function header() {
         />
         <Image src="/usda.png" alt="usda" width={100} height={100} />
         <Image src="/map.png" alt="map" width={100} height={100} />
-        <Image src="/logo.png" alt="logo" width={100} height={100} />
+        <Image src="/logo.png" alt="logo" width={120} height={100} />
+        <Image src="/american.png" alt="american" width={120} height={100} />
       </div>
     </section>
   )
