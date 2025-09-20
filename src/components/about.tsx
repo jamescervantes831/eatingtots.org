@@ -47,11 +47,13 @@ export default function about() {
         </div>
       </section>
       <section className="md:py-16 py-12 md:px-32 px-4 relative bg-[#0da84a]">
+        <a href="https://forms.gle/Ybe2n32C2cgtsLxb6" target='_blank'>
         <p className="text-white font-bold text-2xl md:w-1/2 w-full mx-auto">
           A New CACFP Sponsor is Coming Soon! 🌟
           Eating Tots Inc. is preparing to support providers like YOU!
           Join our waitlist and be the first to know when we launch!
         </p>
+        </a>
         <div className="absolute top-[50%] right-0">
           <Image src="/cherry.png" alt="banner" width={150} height={150} className="hidden md:block" />
         </div>
