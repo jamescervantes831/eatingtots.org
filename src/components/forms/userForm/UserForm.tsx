@@ -1,7 +1,15 @@
 "use client";
 
 import { createPaymentIntentService } from "@/services/paymentIntentServices";
-import { useState, FormEvent, Dispatch, SetStateAction } from "react";
+import { useSearchParams } from "next/navigation";
+import {
+  useState,
+  FormEvent,
+  Dispatch,
+  SetStateAction,
+  useRef,
+  useEffect,
+} from "react";
 type Props = {
   setStep: Dispatch<SetStateAction<"user" | "payment">>;
   setStripeClientSecret: Dispatch<SetStateAction<string>>;
@@ -15,6 +23,8 @@ type SupportFormValues = {
 };
 
 export const UserForm = ({ setStep, setStripeClientSecret }: Props) => {
+  const searchParams = useSearchParams();
+  const containerRef = useRef<HTMLElement | null>(null);
   const [values, setValues] = useState<SupportFormValues>({
     name: "",
     email: "",
@@ -58,8 +68,22 @@ export const UserForm = ({ setStep, setStripeClientSecret }: Props) => {
 
   const suggested = ["10", "25", "50", "100"];
 
+  useEffect(() => {
+    if (searchParams.get("donation") === "1") {
+      containerRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      containerRef.current?.focus();
+    }
+  }, [searchParams]);
+
   return (
-    <section className="w-full">
+    <section
+      ref={containerRef}
+      tabIndex={-1}
+      className="w-full focus:outline-none"
+    >
       <div className="mx-auto max-w-3xl px-4 py-10">
         {/* Header band */}
         <div className="rounded-3xl border-4 border-lime-300 bg-green-600 px-6 py-7 shadow-sm">

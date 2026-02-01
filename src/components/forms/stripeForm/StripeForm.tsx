@@ -5,11 +5,12 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useEffect, useRef } from "react";
 
 export const StripePaymentCard = () => {
   const stripe = useStripe();
   const elements = useElements();
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -25,7 +26,7 @@ export const StripePaymentCard = () => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: process.env.NEXT_PUBLIC_APP_URL!,
+        return_url: `${process.env.NEXT_PUBLIC_APP_URL!}/success`,
       },
     });
 
@@ -35,8 +36,20 @@ export const StripePaymentCard = () => {
     }
   };
 
+  useEffect(() => {
+    containerRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+    containerRef.current?.focus();
+  }, []);
+
   return (
-    <section className="w-full">
+    <section
+      ref={containerRef}
+      tabIndex={-1}
+      className="w-full focus:outline-none"
+    >
       <div className="mx-auto max-w-2xl px-4 py-12">
         {/* Header */}
         <div className="rounded-3xl border-4 border-lime-300 bg-[#0da84a] px-6 py-6 shadow-sm">
