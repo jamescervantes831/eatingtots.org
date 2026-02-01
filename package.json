@@ -9,9 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^5.4.1",
+    "@stripe/stripe-js": "^8.6.3",
+    "framer-motion": "^12.27.5",
     "next": "15.4.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
+    "stripe": "^20.2.0",
     "swiper": "^11.2.10"
   },
   "devDependencies": {
