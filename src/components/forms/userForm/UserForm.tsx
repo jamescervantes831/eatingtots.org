@@ -1,14 +1,7 @@
 "use client";
 
 import { createPaymentIntentService } from "@/services/paymentIntentServices";
-import {
-  useState,
-  FormEvent,
-  Dispatch,
-  SetStateAction,
-  useRef,
-  useEffect,
-} from "react";
+import { useState, Dispatch, SetStateAction, useRef, useEffect } from "react";
 
 type Props = {
   setStep: Dispatch<SetStateAction<"user" | "payment">>;
@@ -99,7 +92,7 @@ export const UserForm = ({
     return next;
   };
 
-  const onSubmit = async (e: FormEvent) => {
+  const onSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // client validation first

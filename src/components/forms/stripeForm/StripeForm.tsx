@@ -5,7 +5,7 @@ import {
   useElements,
   useStripe,
 } from "@stripe/react-stripe-js";
-import { FormEvent, useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export const StripePaymentCard = () => {
   const stripe = useStripe();
@@ -15,7 +15,7 @@ export const StripePaymentCard = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
 
