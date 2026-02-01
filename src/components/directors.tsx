@@ -10,7 +10,7 @@ const directors = [
   },
   {
     img: "/member2.png",
-    name: "Denny",
+    name: "Denny Sena",
     title: "Board Member",
     bio: `Denny is a seasoned child care professional with ownership and operational experience across three licensed group family daycare programs. She holds an Associate’s degree in Accounting and combines financial acumen with hands-on early childhood care experience. She mentors new providers, streamlines compliance across sites, and leads with a focus on quality care, community trust, and sustainable programs.`,
   },

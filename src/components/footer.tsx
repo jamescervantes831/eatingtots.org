@@ -21,8 +21,7 @@ export default function Footer() {
           <div className="space-y-1 text-sm font-semibold">
             <p>Contact Us</p>
             <p>
-              📞 <span className="font-bold">914-539-9780</span> ·{" "}
-              <span className="font-bold">646-228-1470</span>
+              📞 <span className="font-bold">475-265-6009</span>
             </p>
             <p>
               ✉️{" "}
