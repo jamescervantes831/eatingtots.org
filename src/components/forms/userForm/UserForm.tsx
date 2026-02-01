@@ -1,7 +1,6 @@
 "use client";
 
 import { createPaymentIntentService } from "@/services/paymentIntentServices";
-import { useSearchParams } from "next/navigation";
 import {
   useState,
   FormEvent,
@@ -13,6 +12,7 @@ import {
 type Props = {
   setStep: Dispatch<SetStateAction<"user" | "payment">>;
   setStripeClientSecret: Dispatch<SetStateAction<string>>;
+  isDonationLink?: boolean;
 };
 type SupportFormValues = {
   name: string;
@@ -22,8 +22,11 @@ type SupportFormValues = {
   subscribe: boolean;
 };
 
-export const UserForm = ({ setStep, setStripeClientSecret }: Props) => {
-  const searchParams = useSearchParams();
+export const UserForm = ({
+  setStep,
+  setStripeClientSecret,
+  isDonationLink,
+}: Props) => {
   const containerRef = useRef<HTMLElement | null>(null);
   const [values, setValues] = useState<SupportFormValues>({
     name: "",
@@ -67,16 +70,15 @@ export const UserForm = ({ setStep, setStripeClientSecret }: Props) => {
   };
 
   const suggested = ["10", "25", "50", "100"];
-
   useEffect(() => {
-    if (searchParams.get("donation") === "1") {
+    if (isDonationLink) {
       containerRef.current?.scrollIntoView({
         behavior: "smooth",
         block: "start",
       });
       containerRef.current?.focus();
     }
-  }, [searchParams]);
+  }, [isDonationLink]);
 
   return (
     <section

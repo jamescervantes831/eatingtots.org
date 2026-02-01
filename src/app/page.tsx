@@ -6,14 +6,19 @@ import Directors from "../components/directors";
 import Registration from "../components/registration";
 import Footer from "../components/footer";
 import { FormPage } from "@/components/forms/FormPage";
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ donation?: string }>;
+}) {
+  const { donation } = await searchParams;
   return (
     <section className="bg-white">
       <LogoSlider />
       <Header />
       <Hero />
       <About />
-      <FormPage />
+      <FormPage donation={donation} />
       <Registration />
       <Directors />
       <Footer />

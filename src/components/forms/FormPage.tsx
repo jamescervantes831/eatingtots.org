@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { StripePaymentCard } from "./stripeForm/StripeForm";
 import { StripeElementsProvider } from "@/Providers/StripeElementProvider";
 
-export const FormPage = () => {
+export const FormPage = ({ donation }: { donation?: string }) => {
   const [step, setStep] = useState<"user" | "payment">("user");
   const [stripeClientSecret, setStripeClientSecret] = useState<string>("");
   return (
@@ -20,6 +20,7 @@ export const FormPage = () => {
           className="mx-auto max-w-3xl px-4 py-10"
         >
           <UserForm
+            isDonationLink={donation !== undefined && donation === "1"}
             setStep={setStep}
             setStripeClientSecret={setStripeClientSecret}
           />
