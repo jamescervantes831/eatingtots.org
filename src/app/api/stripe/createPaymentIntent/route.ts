@@ -31,6 +31,10 @@ export async function POST(req: NextRequest) {
       amount: stripeAmount,
       currency: "usd",
       payment_method_types: ["card", "link"],
+      metadata: {
+        message,
+        subscribe: `${subscribe}`,
+      },
     });
 
     log("info", "Payment Intent Created");

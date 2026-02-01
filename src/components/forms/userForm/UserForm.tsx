@@ -168,7 +168,7 @@ export const UserForm = ({ setStep, setStripeClientSecret }: Props) => {
             </div>
 
             {/* Message */}
-            {/* <label className="space-y-2">
+            <label className="space-y-2">
               <span className="text-sm font-bold text-green-900">
                 Message (optional)
               </span>
@@ -180,10 +180,10 @@ export const UserForm = ({ setStep, setStripeClientSecret }: Props) => {
                 disabled={status === "submitting"}
                 className="w-full resize-none rounded-2xl border-2 border-green-200 bg-white px-4 py-3 text-green-900 outline-none transition focus:border-green-500 focus:ring-4 focus:ring-green-200"
               />
-            </label> */}
+            </label>
 
             {/* Subscribe */}
-            {/* <label className="flex items-start gap-3 rounded-2xl border-2 border-green-200 bg-white px-4 py-3">
+            <label className="flex items-start gap-3 rounded-2xl border-2 border-green-200 bg-white px-4 py-3">
               <input
                 type="checkbox"
                 checked={values.subscribe}
@@ -199,7 +199,7 @@ export const UserForm = ({ setStep, setStripeClientSecret }: Props) => {
                   Updates about launch, provider resources, and new tools.
                 </div>
               </div>
-            </label> */}
+            </label>
 
             {/* Submit */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
