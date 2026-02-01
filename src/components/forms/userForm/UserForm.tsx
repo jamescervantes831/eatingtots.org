@@ -9,11 +9,13 @@ import {
   useRef,
   useEffect,
 } from "react";
+
 type Props = {
   setStep: Dispatch<SetStateAction<"user" | "payment">>;
   setStripeClientSecret: Dispatch<SetStateAction<string>>;
   isDonationLink?: boolean;
 };
+
 type SupportFormValues = {
   name: string;
   email: string;
@@ -22,12 +24,34 @@ type SupportFormValues = {
   subscribe: boolean;
 };
 
+type FieldErrors = Partial<
+  Record<keyof Pick<SupportFormValues, "name" | "email" | "amount">, string>
+>;
+
+const isValidEmail = (email: string) => {
+  // practical email validation (not perfect, but solid for UI)
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(email.trim());
+};
+
+const normalizeAmount = (raw: string) => {
+  const digitsOnly = raw.replace(/[^\d]/g, "");
+
+  if (!digitsOnly) return "1";
+
+  const num = Number(digitsOnly);
+
+  if (!Number.isFinite(num) || num < 1) return "1";
+
+  return String(num);
+};
+
 export const UserForm = ({
   setStep,
   setStripeClientSecret,
   isDonationLink,
 }: Props) => {
   const containerRef = useRef<HTMLElement | null>(null);
+
   const [values, setValues] = useState<SupportFormValues>({
     name: "",
     email: "",
@@ -36,6 +60,8 @@ export const UserForm = ({
     subscribe: true,
   });
 
+  const [errors, setErrors] = useState<FieldErrors>({});
+
   const [status, setStatus] = useState<
     "idle" | "submitting" | "success" | "error"
   >("idle");
@@ -43,26 +69,74 @@ export const UserForm = ({
   const update = <K extends keyof SupportFormValues>(
     key: K,
     val: SupportFormValues[K],
-  ) => setValues((v) => ({ ...v, [key]: val }));
+  ) => {
+    setValues((v) => ({ ...v, [key]: val }));
+
+    // clear error as user fixes the field
+    if (key === "name" || key === "email" || key === "amount") {
+      setErrors((prev) => ({ ...prev, [key]: undefined }));
+    }
+  };
+
+  const validate = (v: SupportFormValues): FieldErrors => {
+    const next: FieldErrors = {};
+
+    // name required
+    if (!v.name.trim()) next.name = "Name is required.";
+
+    // email required + valid
+    if (!v.email.trim()) next.email = "Email is required.";
+    else if (!isValidEmail(v.email))
+      next.email = "Enter a valid email address.";
+
+    // amount >= 1
+    const amountNum = Number(v.amount);
+    if (!v.amount.trim()) next.amount = "Amount is required.";
+    else if (!Number.isFinite(amountNum))
+      next.amount = "Amount must be a number.";
+    else if (amountNum < 1) next.amount = "Amount must be $1 or more.";
+
+    return next;
+  };
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    // client validation first
+    const nextErrors = validate(values);
+    if (nextErrors.name || nextErrors.email || nextErrors.amount) {
+      setErrors(nextErrors);
+      setStatus("idle");
+
+      // bring the user to the form (and to first invalid field)
+      containerRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      return;
+    }
+
+    const normalizedAmount = normalizeAmount(values.amount);
+
     setStatus("submitting");
 
     try {
-      // TODO: call your API route (e.g. /api/support/create-payment-intent)
-      const res = await createPaymentIntentService(values);
-      console.log(res.data);
+      const res = await createPaymentIntentService({
+        ...values,
+        // optional: normalize whitespace
+        name: values.name.trim(),
+        email: values.email.trim(),
+        amount: normalizedAmount, // normalize
+      });
+
       if (res.statusText === "Success") {
         setStripeClientSecret(res.data.clientSecret);
         setStep("payment");
         return;
       }
+
       setStatus("error");
-      await new Promise((r) => setTimeout(r, 400)); // demo
-      setStatus("success");
     } catch {
-      console.log("error");
       setStatus("error");
     } finally {
       setTimeout(() => setStatus("idle"), 2500);
@@ -70,6 +144,7 @@ export const UserForm = ({
   };
 
   const suggested = ["10", "25", "50", "100"];
+
   useEffect(() => {
     if (isDonationLink) {
       containerRef.current?.scrollIntoView({
@@ -79,6 +154,12 @@ export const UserForm = ({
       containerRef.current?.focus();
     }
   }, [isDonationLink]);
+
+  const inputBase =
+    "w-full rounded-2xl border-2 bg-white px-4 py-3 text-green-900 outline-none transition focus:ring-4";
+  const okBorder =
+    "border-green-200 focus:border-green-500 focus:ring-green-200";
+  const errBorder = "border-red-400 focus:border-red-500 focus:ring-red-200";
 
   return (
     <section
@@ -100,7 +181,6 @@ export const UserForm = ({
               </p>
             </div>
 
-            {/* Fun badge */}
             <div className="hidden shrink-0 rounded-2xl bg-white px-4 py-2 text-center sm:block">
               <div className="text-xs font-bold text-green-700">YUM!</div>
               <div className="text-[10px] font-semibold text-green-700/70">
@@ -112,7 +192,14 @@ export const UserForm = ({
 
         {/* Form card */}
         <div className="mt-6 rounded-3xl border-4 border-lime-300 bg-lime-100 p-6 shadow-sm sm:p-8">
-          <form onSubmit={onSubmit} className="space-y-6">
+          <form onSubmit={onSubmit} className="space-y-6" noValidate>
+            {/* If any field errors, show a small summary */}
+            {(errors.name || errors.email || errors.amount) && (
+              <div className="rounded-2xl border-2 border-red-300 bg-white px-4 py-3 text-sm font-semibold text-red-700">
+                Please fix the highlighted fields below.
+              </div>
+            )}
+
             {/* Name + Email */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <label className="space-y-2">
@@ -120,11 +207,29 @@ export const UserForm = ({
                 <input
                   value={values.name}
                   onChange={(e) => update("name", e.target.value)}
+                  onBlur={() =>
+                    setErrors((p) => ({
+                      ...p,
+                      ...validate(values),
+                      email: p.email,
+                      amount: p.amount,
+                    }))
+                  }
                   placeholder="Your name"
-                  className="w-full rounded-2xl border-2 border-green-200 bg-white px-4 py-3 text-green-900 outline-none transition focus:border-green-500 focus:ring-4 focus:ring-green-200"
+                  className={[
+                    inputBase,
+                    errors.name ? errBorder : okBorder,
+                  ].join(" ")}
                   autoComplete="name"
                   disabled={status === "submitting"}
+                  aria-invalid={!!errors.name}
+                  aria-describedby={errors.name ? "name-error" : undefined}
                 />
+                {errors.name && (
+                  <p id="name-error" className="text-xs font-bold text-red-600">
+                    {errors.name}
+                  </p>
+                )}
               </label>
 
               <label className="space-y-2">
@@ -132,12 +237,33 @@ export const UserForm = ({
                 <input
                   value={values.email}
                   onChange={(e) => update("email", e.target.value)}
+                  onBlur={() =>
+                    setErrors((p) => ({
+                      ...p,
+                      ...validate(values),
+                      name: p.name,
+                      amount: p.amount,
+                    }))
+                  }
                   placeholder="you@email.com"
-                  className="w-full rounded-2xl border-2 border-green-200 bg-white px-4 py-3 text-green-900 outline-none transition focus:border-green-500 focus:ring-4 focus:ring-green-200"
+                  className={[
+                    inputBase,
+                    errors.email ? errBorder : okBorder,
+                  ].join(" ")}
                   autoComplete="email"
                   inputMode="email"
                   disabled={status === "submitting"}
+                  aria-invalid={!!errors.email}
+                  aria-describedby={errors.email ? "email-error" : undefined}
                 />
+                {errors.email && (
+                  <p
+                    id="email-error"
+                    className="text-xs font-bold text-red-600"
+                  >
+                    {errors.email}
+                  </p>
+                )}
               </label>
             </div>
 
@@ -180,12 +306,31 @@ export const UserForm = ({
                       e.target.value.replace(/[^\d]/g, "").slice(0, 6),
                     )
                   }
+                  onBlur={() =>
+                    setErrors((p) => ({
+                      ...p,
+                      ...validate(values),
+                      name: p.name,
+                      email: p.email,
+                    }))
+                  }
                   placeholder="25"
-                  className="w-full rounded-2xl border-2 border-green-200 bg-white px-4 py-3 text-green-900 outline-none transition focus:border-green-500 focus:ring-4 focus:ring-green-200"
+                  className={[
+                    inputBase,
+                    errors.amount ? errBorder : okBorder,
+                  ].join(" ")}
                   inputMode="numeric"
                   disabled={status === "submitting"}
+                  aria-invalid={!!errors.amount}
+                  aria-describedby={errors.amount ? "amount-error" : undefined}
                 />
               </div>
+
+              {errors.amount && (
+                <p id="amount-error" className="text-xs font-bold text-red-600">
+                  {errors.amount}
+                </p>
+              )}
 
               <p className="text-xs font-semibold text-green-900/70">
                 Note: Contributions are{" "}
