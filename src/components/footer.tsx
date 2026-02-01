@@ -1,14 +1,40 @@
-import React from 'react'
+import React from "react";
 
-export default function footer() {
+export default function Footer() {
   return (
-    <section className="bg-[#0da84a] md:px-32 px-4 py-4 relative z-9">
-      <div className="flex flex-col md:flex-row md:text-start text-center justify-between items-center text-[#c1ff72]">
-        <p>© 2025 Eating Tots | Nonprofit EIN: [Your EIN] <br />
-          Privacy Policy | Terms & Conditions (optional)</p>
-        <p>Contact: 914-539-9780 or 646-228-1470 <br />
-          Email: theoffice@eatingtots.org</p>
+    <footer className="relative z-10 bg-[#0da84a] md:px-32 px-4 py-8">
+      <div className="mx-auto max-w-6xl">
+        {/* Top divider */}
+        <div className="mb-6 h-1 w-24 rounded-full bg-[#c1ff72] mx-auto md:mx-0" />
+
+        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between text-[#c1ff72] text-center md:text-left">
+          {/* Left */}
+          <div className="space-y-1 text-sm font-semibold">
+            <p className="font-extrabold">© 2025 Eating Tots Inc.</p>
+            {/* <p>
+              Nonprofit EIN: <span className="font-bold">[Your EIN]</span>
+            </p> */}
+            <p className="opacity-90">Privacy Policy · Terms & Conditions</p>
+          </div>
+
+          {/* Right */}
+          <div className="space-y-1 text-sm font-semibold">
+            <p>Contact Us</p>
+            <p>
+              📞 <span className="font-bold">475-265-6009</span>
+            </p>
+            <p>
+              ✉️{" "}
+              <a
+                href="mailto:theoffice@eatingtots.org"
+                className="underline underline-offset-4 hover:opacity-90"
+              >
+                theoffice@eatingtots.org
+              </a>
+            </p>
+          </div>
+        </div>
       </div>
-    </section>
-  )
+    </footer>
+  );
 }
