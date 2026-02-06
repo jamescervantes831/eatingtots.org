@@ -11,8 +11,8 @@ const directors = [
   {
     img: "/member2.png",
     name: "Denny Sena",
-    title: "Board Member",
-    bio: `Denny is a seasoned child care professional with ownership and operational experience across three licensed group family daycare programs. She holds an Associate’s degree in Accounting and combines financial acumen with hands-on early childhood care experience. She mentors new providers, streamlines compliance across sites, and leads with a focus on quality care, community trust, and sustainable programs.`,
+    title: "Co-Founder",
+    bio: `Denny is a seasoned child care professional with ownership and operational experience across three licensed group family daycare programs as well has her child development associates certification. She holds an Associate’s degree in Accounting and combines financial acumen with hands-on early childhood care experience. She mentors new providers, streamlines compliance across sites, and leads with a focus on quality care, community trust, and sustainable programs.`,
   },
   {
     img: "/member3.png",
@@ -23,7 +23,7 @@ const directors = [
   {
     img: "/AmandaFornal_1.jpg",
     name: "Amanda Fornal",
-    title: "Certified Board Dietician",
+    title: "Board Advisor-Training, Nutrition Education",
     bio: `Amanda Fornal brings more than 25 years of experience in technology, business strategy, and organizational leadership. She works with founders and nonprofit leaders to build structure, improve operational clarity, and support sustainable growth. She is a certified executive coach through Columbia University and holds a certification in Plant-Based Nutrition focused on the science behind a plant-based diet.`,
   },
 ];
